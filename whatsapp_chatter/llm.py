@@ -6,7 +6,7 @@ import subprocess
 from typing import Iterable, Optional
 
 
-OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "llama3-gradient:8b")
+OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "wizardlm2")
 
 
 def build_system_prompt(person: str, context_text: str, my_name: str | None = None) -> str:
