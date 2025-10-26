@@ -56,6 +56,11 @@ def main(argv: list[str] | None = None) -> int:
         help="Custom focused instruction to steer the model for this run",
         default=None,
     )
+    parser.add_argument(
+        "--last-only",
+        action="store_true",
+        help="Do not use full history; reply based only on the last incoming message and context",
+    )
     args = parser.parse_args(argv)
 
     logging.basicConfig(
@@ -112,7 +117,12 @@ def main(argv: list[str] | None = None) -> int:
         if args.once:
             from .whatsapp import read_all_messages
             log.info("Reading full conversation (single-shot mode)...")
-            convo = read_all_messages(driver)
+            if args.last_only:
+                from .whatsapp import read_last_message
+                last = read_last_message(driver)
+                convo = [last[1]] if last else []
+            else:
+                convo = read_all_messages(driver)
             if args.prompt:
                 convo = convo + [f"Focus: {args.prompt}"]
             user_prompt = build_user_prompt(convo)
@@ -150,8 +160,12 @@ def main(argv: list[str] | None = None) -> int:
                 direction, text = last
                 if direction == 'in' and text != last_seen_text:
                     # New incoming message detected
-                    log.info("New incoming message detected. Building prompt from full conversation...")
-                    convo = read_all_messages(driver)
+                    if args.last_only:
+                        log.info("New incoming message detected. Using only the last message for context...")
+                        convo = [text]
+                    else:
+                        log.info("New incoming message detected. Building prompt from full conversation...")
+                        convo = read_all_messages(driver)
                     if args.prompt:
                         convo = convo + [f"Focus: {args.prompt}"]
                     user_prompt = build_user_prompt(convo)

@@ -55,6 +55,9 @@ New Modes
   - Dry-run/preview/send all apply here as well.
   - Example: `python -m whatsapp_chatter.cli "<Contact Name>" --me "<Your Name>" --initiate --preview`
 
+- Last-only mode: add `--last-only` to ignore the full history and reply using only the last incoming message plus your context (and optional `--prompt`).
+  - Example: `python -m whatsapp_chatter.cli "<Contact Name>" --me "<Your Name>" --last-only`
+
 CLI Flags
 ---------
 - `--me`: Your name for the model context.
@@ -63,6 +66,10 @@ CLI Flags
 - `--interval`: Polling interval in seconds for continuous mode (default 6).
 - `--headless`: Run Chrome headless (login QR requires non-headless initially).
 - `--once`: Generate one reply and exit.
+- `--preview`: Type into composer without sending.
+- `--initiate`: Proactively compose an opener.
+- `--last-only`: Use only the last incoming message.
+- `--prompt`: Focused instruction to steer tone/behavior for this run.
 
 Troubleshooting
 ---------------
