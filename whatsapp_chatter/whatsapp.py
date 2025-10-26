@@ -6,6 +6,7 @@ from typing import List, Tuple
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -137,6 +138,18 @@ def send_message(driver, text: str) -> None:
 
     box = _find_composer(driver)
     box.click()
-    box.clear() if hasattr(box, 'clear') else None
-    box.send_keys(text)
+    # Some Chromedriver builds error on non-BMP chars via send_keys; fallback to clipboard paste
+    try:
+        box.clear() if hasattr(box, 'clear') else None
+        box.send_keys(text)
+    except Exception:
+        # Use clipboard-based paste to support full Unicode
+        import pyperclip  # type: ignore
+        try:
+            pyperclip.copy(text)
+            ActionChains(driver).key_down(Keys.CONTROL).send_keys('v').key_up(Keys.CONTROL).perform()
+        except Exception:
+            # As a last resort, replace non-BMP with safe placeholders
+            safe = text.encode('utf-16', 'surrogatepass').decode('utf-16', 'ignore')
+            box.send_keys(safe)
     box.send_keys(Keys.ENTER)

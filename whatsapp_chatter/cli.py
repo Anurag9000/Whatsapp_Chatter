@@ -81,8 +81,8 @@ def main(argv: list[str] | None = None) -> int:
         open_whatsapp(driver)
         log.info("Selecting contact: %s", person)
         select_contact(driver, person)
-        log.info("Building system prompt (me=%s, context=%s)", args.my_name, (args.context or f"{person}.txt"))
-        system_prompt = build_system_prompt(person, context_text, my_name=args.my_name)
+        log.info("Building system prompt (me=%s, context=%s, last_only=%s)", args.my_name, (args.context or f"{person}.txt"), args.last_only)
+        system_prompt = build_system_prompt(person, context_text, my_name=args.my_name, last_only=args.last_only)
 
         if args.initiate:
             from .whatsapp import read_all_messages

@@ -9,7 +9,7 @@ from typing import Iterable, Optional
 OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "wizardlm2")
 
 
-def build_system_prompt(person: str, context_text: str, my_name: str | None = None) -> str:
+def build_system_prompt(person: str, context_text: str, my_name: str | None = None, last_only: bool = False) -> str:
     base = (
         "You are helping me reply on WhatsApp. "
         "Adopt my tone, brevity, and style. "
@@ -25,6 +25,12 @@ def build_system_prompt(person: str, context_text: str, my_name: str | None = No
     else:
         base += (
             f"No personal context provided.{speaker} Default to friendly, concise replies.\n"
+        )
+    if last_only:
+        base += (
+            "\nCRITICAL: Only consider the very last incoming message when composing the reply. "
+            "Do not rely on earlier conversation except for the user's style context above. "
+            "Produce exactly one reply message.\n"
         )
     return base
 
