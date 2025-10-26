@@ -1,0 +1,20 @@
+# Context files should never be committed
+contexts/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+env/
+venv/
+.env/
+
+# Virtual environments (common locations)
+/.venv/
+/venv/
+/env/
+
+# OS
+.DS_Store
+Thumbs.db
