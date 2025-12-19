@@ -6,7 +6,7 @@ Python automation that replies on WhatsApp Web using your personal tone and styl
 Quick Start
 -----------
 - Requirements: Python 3.10+, Chrome, Selenium (auto-manages driver), and Ollama with `llama3.2:3b` pulled.
-- Create a `contexts/` folder locally (ignored by Git). Add one file per person, e.g. `contexts/srishti.txt`.
+- Create a `contexts/` folder locally (ignored by Git). Add one file per person, e.g. `contexts/mom.txt`.
 - Install deps in a venv, then run the CLI (examples below).
 
 Features
